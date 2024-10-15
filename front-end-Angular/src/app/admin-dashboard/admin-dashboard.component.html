@@ -1,0 +1,71 @@
+<app-loader></app-loader>
+
+<aside id="default-sidebar" [class.-translate-x-full]="isSidebarHidden" class="fixed top-0 left-0 z-[999] w-64 h-screen transition-transform sm:translate-x-0 bg-gray-50 dark:bg-gray-800" aria-label="Sidebar">
+  <div class="h-full px-3 py-4 overflow-y-auto">
+    <div class="sm:hidden w-full flex justify-end">
+      <i class="fa-solid fa-xmark-circle text-xl cursor-pointer" (click)="toggleSidebar()"></i>
+    </div>
+
+    <ul class="space-y-2 font-medium">
+      <li *ngFor="let link of sidebarLinks">
+        <a [routerLink]="link.route" routerLinkActive="bg-gray-300" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group">
+          <i [class]="link.icon"></i>
+          <span class="ms-3">{{ link.label }}</span>
+        </a>
+      </li>
+      <li>
+        <a (click)="logout()" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-200 dark:hover:bg-gray-700 group">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span class="flex-1 ms-3 whitespace-nowrap cursor-pointer">Se déconnecter</span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</aside>
+
+
+
+<div class="p-4 sm:ml-64">
+  <div *ngIf="!isSidebarHidden" class="fixed inset-0 max-h-screen z-50 bg-black opacity-50 overflow-hidden"></div>
+  <button (click)="toggleSidebar()" aria-controls="default-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
+    <span class="sr-only">Open sidebar</span>
+    <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+      <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+    </svg>
+  </button>
+  <nav class="sticky top-0 bg-white shadow-md mb-4">
+    <div class="max-w-7xl mx-auto py-3 px-4 sm:px-6 lg:px-8">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex-1 flex flex-col lg:flex-row justify-between items-center">
+          <div class="relative w-full lg:w-1/2">
+            <span class="absolute inset-y-0 left-0 flex items-center pl-3">
+              <i class="fa-solid fa-search text-gray-400"></i>
+            </span>
+            <input id="search" class="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md leading-5 bg-white placeholder-gray-500 focus:outline-none focus:placeholder-gray-400 focus:border-blue-300 focus:shadow-outline-blue sm:text-sm transition duration-150 ease-in-out" placeholder="Search" type="search">
+          </div>
+          <div class="flex items-center gap-2 mt-4 lg:mt-0">
+            <div class="relative flex items-center gap-2">
+              <div class="flex flex-col text-xs">
+                <span class="ml-2 font-semibold">{{user.nom}} {{user.nom}}</span>
+                <span class="ml-2">{{ user.role }}</span>
+              </div>
+              <button id="userProfile" (click)="toggleDropdown()" class="flex items-center gap-1">
+                <i class="fa-solid fa-user-circle text-3xl"></i>
+                <i class="fa-solid fa-chevron-down text-xs"></i>
+              </button>
+              <div id="dropDownMenu" *ngIf="isDropdownVisible" class="absolute right-4 mt-32 w-48 bg-white rounded-md shadow-lg py-2 z-50">
+                <a routerLink="profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                <p (click)="logout()" class="cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <router-outlet></router-outlet>
+  </main>
+</div>
+
+

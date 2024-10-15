@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Demande Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-200 font-sans">
+<div class="container mx-auto my-10 px-4">
+    <h1 class="text-4xl font-bold mb-6">Demande Form</h1>
+    <form th:action="@{/addDemande}" th:object="${demande}" method="post" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <label class="block text-gray-700 font-bold mb-2" for="code">
+                Code Demande:
+            </label>
+            <input class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="code" type="text" th:field="*{code}" required>
+        </div>
+        <div class="mb-6">
+            <label class="block text-gray-700 font-bold mb-2" for="description">
+                Description:
+            </label>
+            <textarea class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="description" th:field="*{description}" required></textarea>
+        </div>
+        <div th:if="${error}" class="bg-red-500 text-white px-6 py-4 mb-4 rounded-md text-lg flex items-center mx-auto w-full">
+            <svg class="w-5 h-5 mr-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v4a1 1 0 102 0V5zm-1 8a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path>
+            </svg>
+            <span th:text="${error}"></span>
+        </div>
+        <div class="flex items-center justify-between">
+            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">
+                Submit
+            </button>
+        </div>
+    </form>
+    <!-- Alert box for error message -->
+
+
+    <h2 class="text-2xl font-bold mb-4">Demandes</h2>
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4" th:if="${#lists.size(demandes)} > 0">
+        <ul>
+            <li th:each="d : ${demandes}" class="border-b border-gray-200 py-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <span th:text="${d.code}" class="font-bold"></span> - <span th:text="${d.description}"></span>
+                    </div>
+                    <div>
+                        <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline mr-2" data-modal-target="#editModal" data-modal-toggle="editModal" th:data-code="${d.code}" th:data-description="${d.description}">
+                            Edit
+                        </button>
+                        <a th:href="@{/deleteDemande/{id}(id=${d.code})}" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                            Delete
+                        </a>
+                    </div>
+                </div>
+            </li>
+        </ul>
+    </div>
+    <p th:if="${#lists.size(demandes)} == 0" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        No demandes yet.
+    </p>
+
+    <!-- Modal -->
+    <div id="editModal" tabindex="-1" aria-hidden="true" class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-modal md:h-full">
+        <div class="relative p-4 w-full max-w-2xl h-full md:h-auto">
+            <div class="bg-white rounded-lg shadow relative">
+                <div class="flex justify-between items-start p-4 rounded-t border-b">
+                    <h3 class="text-xl font-semibold text-gray-900">
+                        Edit Demande
+                    </h3>
+                    <button type="button" class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm p-1.5 ml-auto inline-flex items-center" data-modal-toggle="editModal">
+                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
+                        <span class="sr-only">Close modal</span>
+                    </button>
+                </div>
+                <div class="p-6">
+                    <form th:action="@{/updateDemande}" th:object="${demande}" method="POST" class="space-y-6">
+                        <input type="hidden" id="editCode" th:field="*{code}">
+                        <div class="mb-4">
+                            <label for="editDescription" class="block mb-2 text-sm font-medium text-gray-900">Description</label>
+                            <textarea id="editDescription" th:field="*{description}" rows="3" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required></textarea>
+                        </div>
+                        <div class="flex justify-end">
+                            <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm w-full sm:w-auto px-5 py-2.5 text-center">
+                                Update
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include Tailwind CSS and any necessary JavaScript for the modal -->
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/flowbite@1.5.3/dist/flowbite.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editButtons = document.querySelectorAll('[data-modal-target="#editModal"]');
+        var editCodeInput = document.getElementById('editCode');
+
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var code = this.getAttribute('data-code');
+                var description = this.getAttribute('data-description');
+                editCodeInput.value = code;
+                document.getElementById('editDescription').value = description;
+            });
+        });
+    });
+</script>
+</body>
+</html>

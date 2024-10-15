@@ -1,0 +1,46 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+  <div class="bg-blue-100 rounded-lg shadow-md p-6">
+    <i class="fa-solid fa-book text-blue-500 text-3xl mb-2"></i>
+    <h2 class="text-2xl font-semibold text-gray-700">Modules</h2>
+    <p class="text-gray-500 text-lg mt-2">Total <span class="ml-2 font-bold">{{modulesNumber }}</span></p>
+  </div>
+  <div class="bg-green-100 rounded-lg shadow-md p-6">
+    <i class="fa-solid fa-user-graduate text-green-500 text-3xl mb-2 font-bold"></i>
+    <h2 class="text-2xl font-semibold text-gray-700">Enseignants</h2>
+    <p class="text-gray-500 text-lg mt-2">Total <span class="ml-2 font-bold">{{ enseignantsNumber }}</span></p>
+  </div>
+  <div class="bg-yellow-100 rounded-lg shadow-md p-6">
+    <i class="fa-solid fa-users text-yellow-500 text-3xl mb-2"></i>
+    <h2 class="text-2xl font-semibold text-gray-700">Interventions</h2>
+    <p class="text-gray-500 text-lg mt-2">Total <span class="ml-2 font-bold">{{interventionsNumber}}</span></p>
+  </div>
+  <div class="bg-purple-100 rounded-lg shadow-md p-6">
+    <i class="fa-solid fa-book-open text-purple-500 text-3xl mb-2"></i>
+    <h2 class="text-2xl font-semibold text-gray-700">Filliéres</h2>
+    <p class="text-gray-500 text-lg mt-2">Total <span class="ml-2 font-bold">{{ fillieresNumber }}</span></p>
+  </div>
+</div>
+<div class="flex flex-col h-full">
+  <!-- Your grid here -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 p-4">
+
+  </div>
+  <!-- Your charts here -->
+  <div class="flex-grow">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 p-4">
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <canvas id="barChart"></canvas>
+      </div>
+
+      <div class="bg-white rounded-lg shadow-md p-6">
+        <div class="max-w-sm mx-auto">
+          <label class="block mb-2 text-sm font-medium text-gray-900 " >Filliere : </label>
+          <select (change)="onFiliereChange($event)" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-1/2 p-2.5 " >
+            <option *ngFor="let filiere of filieres" [value]="filiere.id">{{filiere.nom}}</option>
+          </select>
+        </div>
+        <canvas id="pieChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>

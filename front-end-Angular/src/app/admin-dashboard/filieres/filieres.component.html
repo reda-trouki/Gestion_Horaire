@@ -1,0 +1,67 @@
+<div class="mt-5 p-4">
+  <div class="mb-4 flex items-center justify-between">
+    <div class="flex items-center">
+      <i class="fa-solid fa-school text-3xl mr-2"></i>
+      <h3 class="text-2xl font-semibold text-gray-900">Filières</h3>
+    </div>
+    <button (click)="this.action='Ajouter'; this.showform=true; this.validationError=false;" type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      <i class="fa-solid fa-plus me-2"></i>
+      Ajouter Filière
+    </button>
+  </div>
+
+  <!-- Add form elements here for adding a new filière -->
+  <div *ngIf="showform" class="bg-white p-4 rounded-lg shadow dark:bg-gray-700 animate-dropIn">
+    <h4 class="text-lg font-semibold text-gray-900 dark:text-white">{{action}} une filière</h4>
+    <!-- Add form elements here for adding a new filière -->
+    <div *ngIf="validationMessage" class="p-4 rounded" [ngClass]="{'bg-green-500 text-white': !validationError, 'bg-red-500 text-white': validationError}">
+      {{ validationMessage }}
+    </div>
+    <form>
+      <div class="mt-4">
+        <label for="filiereName" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom de la filière:</label>
+        <input [(ngModel)]="filiere_nom" type="text" name="name" id="name" class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500" placeholder="Nom de filière" required>
+      </div>
+
+      <div class="mt-6 flex justify-start flex-col sm:flex-row sm:items-center">
+        <button (click)="handleClick()" type="submit" class="mr-4 mb-2 sm:mb-0 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 flex items-center">
+          <i *ngIf="this.action=='Ajouter'" class="fa-solid fa-plus me-2"></i>
+          <i *ngIf="this.action=='Modifier'" class="fa-solid fa-pen-to-square me-2"></i>
+          {{action}} Filière
+        </button>
+
+        <button (click)="this.showform=false;" type="submit" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 flex items-center">
+          <i class="fa fa-times-circle"></i> Cancel
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div *ngIf="this.filieres.length<=0" class="p-4 mb-4 text-sm text-blue-800 rounded-lg bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+    <span class="font-medium">Aucune filière n'a été trouvée!</span> Veuillez créer des filières.
+  </div>
+  <div *ngIf="this.filieres.length>0" class="mt-6 relative overflow-x-auto sm:rounded-lg">
+   <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div *ngFor="let filiere of filieres" class="rounded shadow-md p-6 bg-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-600">
+      <div class="font-bold text-xl mb-2">{{filiere.nom}}</div>
+        <div class="flex justify-between">
+          <button (click)="set_update(filiere);this.showform=true;this.validationError=false;" type="button" class="font-semibold hover:transition hover:bg-blue-800 text-white bg-blue-500 text-sm px-4 py-2 rounded">
+            <i class="fa-solid fa-pen-to-square me-2"></i>
+            Modifier
+          </button>
+          <button (click)="openConfirmationModal(filiere.id)" type="button" class="font-semibold hover:transition hover:bg-red-800 text-white bg-red-500 text-sm px-2 py-1 rounded">
+            <i class="fa-solid fa-trash me-2"></i>
+            Supprimer
+          </button>
+        </div>
+
+    </div>
+    </div>
+    <app-confirmation
+      *ngIf="showConfirmationModal"
+      [show]="showConfirmationModal"
+      (confirm)="deleteFiliere()"
+      (cancel)="closeConfirmationModal()"
+    ></app-confirmation>
+  </div>
+</div>

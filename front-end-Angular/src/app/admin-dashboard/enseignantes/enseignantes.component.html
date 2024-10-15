@@ -1,0 +1,114 @@
+<div class="mt-5 p-4">
+	<div class="mb-4 flex items-center justify-between">
+		<div class="flex items-center">
+			<i class="fa-solid fa-school text-3xl mr-2"></i>
+			<h3 class="text-2xl font-semibold text-gray-900">Enseignants</h3>
+		</div>
+		<button  (click)="this.action='Ajouter'; this.showform=true; this.validationError=false;" type="button"   class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+			<i class="fa-solid fa-plus me-2"></i>
+			Ajouter Enseignant
+		</button>
+	</div>
+
+	<div *ngIf="showform" class="bg-white p-4 rounded-lg shadow dark:bg-gray-700 animate-dropIn">
+		<h4 class="text-lg font-semibold text-gray-900 dark:text-white">{{action}} un enseignant</h4>
+		<div *ngIf="this.validationError" class="p-4 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400" role="alert">
+			<span class="font-medium">Erreur !</span> {{this.validationMessage}}
+		</div>
+		<form >
+			<div class="mt-4">
+				<label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Email de l'enseignant:</label>
+				<input [(ngModel)]="enseignant_email" [disabled]="action == 'Modifier'" type="email" name="email" id="email" class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500" placeholder="Email de l'enseignant" required="">
+        <div class="flex gap-4 mt-3">
+				<div class="w-1/2"><label for="nom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Nom de l'enseignant:</label>
+				<input [(ngModel)]="enseignant_nom"  type="text" name="nom" id="nom" class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500" placeholder="Nom de l'enseignant" required="">
+        </div>
+          <div class="w-1/2">
+				<label for="prenom" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Prénom de l'enseignant:</label>
+				<input [(ngModel)]="enseignant_prenom"  type="text" name="prenom" id="prenom" class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500" placeholder="Prénom de l'enseignant" required="">
+          </div>
+          </div>
+				<div class="w-full mt-3	" >
+          <label for="password" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Mot de passe de l'enseignant:</label>
+				  <input [(ngModel)]="enseignant_password"  type="password" name="password" id="password" class="mt-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500" placeholder="Mot de passe de l'enseignant" required="">
+        </div>
+        </div>
+
+			<div class="mt-6 flex justify-start">
+				<button  (click)="handleClick()" type="submit" class="mr-4 text-white bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					<i *ngIf="this.action=='Ajouter'" class="fa-solid fa-plus me-2"></i>
+					<i *ngIf="this.action=='Modifier'" class="fa-solid fa-pen-to-square me-2"></i>
+					  {{action}} Enseignant
+				</button>
+
+				<button (click)="this.showform=false;" type="submit" class="text-white bg-red-500 hover:bg-red-600 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800">
+					<i class="fa fa-times-circle"></i> Cancel
+				</button>
+			</div>
+		</form>
+	</div>
+
+	<div *ngIf="this.enseignants.length<=0" class="p-4 mb-4 text-sm text-blue-800 rounded-md bg-blue-50 dark:bg-gray-800 dark:text-blue-400" role="alert">
+		<span class="font-medium">Aucun enseignant n'a été trouvé!</span> Veuillez créer des enseignants.
+	</div>
+	<div *ngIf="this.enseignants.length>0" class="mt-6 relative overflow-x-auto shadow-md sm:rounded-sm">
+    <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left text-gray-700 dark:text-gray-300">
+			<thead class="bg-gray-200 dark:bg-gray-700">
+				<tr>
+					<th class="px-6 py-3 font-medium">
+						Nom de l'enseignant
+					</th>
+          <th class="px-6 py-3 font-medium">
+            Prenom de l'enseignant
+          </th>
+          <th class="px-6 py-3 font-medium">
+            Role de l'enseignant
+          </th>
+          <th class="px-6 py-3 font-medium" >Email de l'enseignant</th>
+					<th class="px-6 py-3 font-medium">
+						Actions
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let enseignant of enseignantsList"  class="border-b dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800">
+					<td class="px-6 py-4 font-semibold ">
+						{{enseignant.nom}}
+					</td>
+          <td class="px-6 py-4">
+            {{enseignant.prenom}}
+          </td>
+          <td class="px-6 py-4">{{enseignant.role}}</td>
+          <td class="px-6 py-4">
+            {{enseignant.email}}
+          </td>
+
+					<td class="px-6 py-4 text-right flex justify-start">
+						<button
+              (click)="set_update(enseignant);this.showform=true;this.validationError=false;"
+              type="button"
+              class="flex justify-center items-center hover:bg-white rounded-md px-2 hover:shadow-md"
+              >
+							<i class="fa-solid text-blue-500 text-2xl fa-pen-to-square me-2"></i>
+						</button>
+						<button
+              (click)="openConfirmationModal(enseignant.email)"
+              type="button"
+              class="flex justify-center items-center hover:bg-white rounded-md px-2 hover:shadow-md"
+            >
+							<i class="fa-solid text-red-500 text-2xl fa-trash me-2"></i>
+						</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+    </div>
+    <app-confirmation
+      *ngIf="showConfirmationModal"
+      [show]="showConfirmationModal"
+      (confirm)="deleteEnseignant()"
+      (cancel)="closeConfirmationModal()"
+    ></app-confirmation>
+	</div>
+</div>
